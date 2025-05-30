@@ -173,6 +173,7 @@ h1 {
     width: hug;
     border-bottom: solid 0.0625em;
     list-style: none;
+    cursor: pointer;
 }
 
 .contents_wrapper{
