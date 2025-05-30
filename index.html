@@ -13,8 +13,7 @@
         <meta property="og:url" content="https://superstorm.cc">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" href="style.css">
-    </head>
-    <!-- Google tag (gtag.js) -->
+        <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-1GMME4DJRG"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
@@ -23,27 +22,30 @@
 
   gtag('config', 'G-1GMME4DJRG');
 </script>
-    <body>
+    </head>
     
+    <body>
+    <div class="wrapper">
         <div class="header">
             <div class="t-center">나의 힘을 세상을 바꾸는 힘으로 연결시키는</div>
             <div><img src="img/logo.svg" id="logo"></div>
             <div><p>거대 폭풍처럼 너무 복잡하고 어려운 21세기의 사회문제들. 정답을 모르니 침묵하기 보다는 정답없는 자유를 누려보면 어떨까요? 무엇이든 예전과는 조금 다르게 행동함으로써, 나로부터 이 세상을 변화시킬 수 있어요. 무엇보다도 단절과 침묵, 무력감에서 스스로를 구해낼 수 있어요!</p></div>
-            <div class="t-center">요즘 사회 이슈, “이건 좀 아니지 않아?” 라고 생각한다면 여기서 무언가 시작해보세요.</div>
+            <div class="t-center">요즘 사회 이슈, “이건 좀 아니지 않아?” 라고 생각한다면 여기서 시작해보세요!</div>
             <div class="form">
-                <form method="POST" action="YOUR_WEBAPP_URL">
-                    <input name="Name" type="text" placeholder="이름" required class="name">
-                    <input name="Email" type="email" placeholder="email@email.com" required class="email">
-                    <button type="submit">메일친구 되기</button>
+                <form class="my-form">
+                    <input name="Name" class="name" type="text" placeholder="이름" required >
+                    <input name="Email" class="email" type="email" placeholder="email@email.com" required >
+                    <button type="submit" class="submit-button">메일친구 되기</button>
                 </form>
             </div>
-            
             <ul class="nav">
                 <a href="#about"><li id="about_btn">ABOUT</li></a>
                 <a href="#movement"><li id="movement_btn">MOVEMENT</li> </a>
                 <a href="#plan"><li id="plan_btn">PLAN</li> </a>
                 <a href="#feedback"><li id="feedback_btn">FEEDBACK</li> </a>
             </ul>
+            
+        </div>
 
         </div>
         <div class="content-wrapper">
@@ -119,9 +121,9 @@
                         </div>
                         <p>지금 슈퍼스톰과 함께하면 이 모든 과정을 함께 경험하고 배울 수 있습니다. 앞으로 일어날 모든 일들에 가장 먼저 함께하고 싶다면 우리의 메일친구가 되어주세요!</p>
                         <div class="header">
-                        <div class="t-center">요즘 사회 이슈, “이건 좀 아니지 않아?” 라고 생각한다면 여기서 무언가 시작해보세요.</div>
+                        <div class="t-center">나의 힘을 세상을 바꾸는 힘으로 전환시키자!</div>
                         <div class="form">
-                            <form method="POST" action="YOUR_WEBAPP_URL">
+                            <form class="my-form">
                                 <input name="Name" type="text" placeholder="이름" required class="name">
                                 <input name="Email" type="email" placeholder="email@email.com" required class="email">
                                 <button type="submit">메일친구 되기</button>
@@ -132,10 +134,11 @@
                 </div>
                 <div class="section" id="feedback"> 
                    <div class="t-center">브레인스토밍 함께 하기</div>
-                   <iframe class="pad" title="SS-brainstorming" name="embed_readwrite" src="https://a0b8-211-196-143-90.ngrok-free.app/p/superstorm?showControls=true&showChat=true&showLineNumbers=true&useMonospaceFont=false" frameborder="0"></iframe>
+                   <iframe class="pad" title="SS-brainstorming" name="embed_readwrite" src="https://a0b8-211-196-143-90.ngrok-free.app/p/superstorm?showControls=true&showChat=true&showLineNumbers=true&useMonospaceFont=false"></iframe>
                 </div>
                 
             </div>
+        </div>
         </div>
         <div class="footer">
             <div class="footer_main">
@@ -155,5 +158,6 @@
             </div>
         </div>
         <script src="bgcolor.js"></script>
+        <script src="subscribe.js"></script>
     </body>
 </html>
