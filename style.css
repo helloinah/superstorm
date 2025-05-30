@@ -73,7 +73,8 @@ div{
 }
 
 img{
-    width: 100%;
+    max-width: 100%;
+    width: 100% !important;
     padding: 0;
     margin: 0;
 }
