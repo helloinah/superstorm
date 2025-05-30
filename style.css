@@ -46,7 +46,7 @@
 }
 
 body{
-    font-size: clamp(12px, 5vw, 20px);
+    font-size: clamp(16px, 5vw, 20px);
     font-family: 'Freesentation', 'authentic-sans-150';
     color: var(--SS-black);
     background-color: var(--SS-white);
