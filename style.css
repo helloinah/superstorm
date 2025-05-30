@@ -45,6 +45,8 @@
     border: 0;
 }
 
+html {scroll-behavior: smooth;}
+
 body{
     font-size: clamp(16px, 5vw, 20px);
     font-family: 'Freesentation', 'authentic-sans-150';
@@ -78,6 +80,7 @@ img{
     padding: 0;
     margin: 0;
 }
+
 
 form {
     display: flex;
