@@ -81,17 +81,22 @@ a:hover, a:active { text-decoration: none; }
 div{
     max-width: 50em;
     min-width: 288px;
-    margin:0 auto;
+    margin: 0 auto;
     display: block;
 }
 
 img{
     max-width: 100%;
-    width: 100% !important;
+    width: 100%;
     padding: 0;
     margin: 0;
 }
 
+svg{
+    width: 100%;
+    max-width: 100%;
+    height: auto;
+}
 
 form {
     display: flex;
@@ -166,7 +171,10 @@ p {
     hanging-punctuation: first last;
 }
 
-li{letter-spacing: 1%;}
+li {
+    line-height: 1.5em;
+    text-align: justify;
+}
 
 h1 {
     font-size: 1.8em;
@@ -357,11 +365,12 @@ h1 {
 @media (max-width: 480px) {
     body {
         font-size: 16px;
-        max-width: calc(100vw - 2em);
+        max-width: 100%;
+        margin: 0 auto;
     }
     
-    nav {
-        justify-content: stretch;
+    .nav {
+        justify-content: space-between;
     }
     
     .form{
@@ -380,11 +389,11 @@ h1 {
     .name{ width: auto; height: 1.5em;}
     .email{ width: auto; height: 1.5em;}
     
-    svg{
+    .box{
         width: 100%;
-        max-width: 100%;
-        height: auto;
+        max-width: 
     }
+    
     .two-column{
         grid-template-columns: repeat(1, minmax(288px, auto));
         grid-template-rows: repeat(4, minmax(0, auto));
@@ -397,11 +406,11 @@ h1 {
     }
     .footer{
         width: 100vw;
-        margin: 0;
     }
     .footer_main{
         flex-direction: column;
         gap: 0.75em;
+        padding-top: 1em;
     }
     
     .footer_main div{
