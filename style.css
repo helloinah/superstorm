@@ -73,6 +73,43 @@ a {
     color: inherit;
 }
 
+.privacy:hover {
+    padding-bottom: 0.125em;
+    border-bottom: solid 0.09em var(--SS-black);
+    cursor: pointer;
+}
+
+.privacy-text {
+    text-align: center;
+    font-size: 0.75em;
+    width: auto;
+    border-top: solid 0.095em var(--SS-black);
+    border-left: solid 0.095em var(--SS-black);
+    border-right: solid 0.095em var(--SS-black);
+    margin-bottom: -1em;
+    /* Initial state (hidden) */
+    opacity: 0;
+    max-height: 0;
+    padding: 0 1em; /* Set initial padding to 0 for top/bottom, keep side padding */
+    overflow: hidden; /* Crucial for max-height animation */
+    box-sizing: border-box; /* Good practice to include padding in width/height calculations */
+
+    /* Add padding to the transition properties */
+    transition:
+        opacity 0.5s ease-out,
+        max-height 0.5s ease-out,
+        padding 0.5s ease-out; /* Add padding to the transition */
+}
+
+.privacy-text.is-visible {
+    /* Final state (visible) */
+    opacity: 1;
+    max-height: 300px; /* IMPORTANT: Ensure this is large enough to contain all content + final padding */
+    padding: 1em 1em 0 1em; /* Set final padding values for top, right, bottom, left */
+    /* Note: padding-bottom: 0 in your original was correct if you literally want no bottom padding in visible state.
+             If you want a slight bottom padding, adjust this. For a smooth transition, the values should be consistent.
+             I've used 1em for top/right/left and 0 for bottom to match your original intent. */
+}
 a:visited { text-decoration: none; color: inherit;}
 a:hover { text-decoration: none; }
 a:focus { text-decoration: none; }
@@ -98,14 +135,23 @@ svg{
     height: auto;
 }
 
-form {
-    display: flex;
-    gap: 0.5em;
-    justify-content: center;
+.my-form {
+    display: grid;
+    grid-gap: 0.5em;
     margin: 0;
-    height: 2.125em;
-    width: fit-content;
+    width: auto;
+    grid-auto-rows: 2.125em auto;
+    grid-template-columns: 25% auto 25% ;
+    grid-template-areas:
+        "name email button"
+        "footer . .";
 }
+
+.my-form > .name{ grid-area: name; grid-column: span 1;}
+.my-form > .email{ grid-area: email; grid-column: span 1;}
+.my-form > .checkbox{ grid-area: footer; grid-column: span 3; height: 1em; font-size: 0.75em; }
+.checkbox span {padding-top: 0.2em;}
+.my-form > .submit-button { grid-area: button; grid-column: span 1; vertical-align: middle;}
 
 button{
     -webkit-appearance: none;
@@ -120,7 +166,6 @@ button{
     padding: 0.55em 0.5em 0.45em 0.5em;
     display: inline-block;
     line-height: 1em;
-    width: 25%;
 }
 
 input{
@@ -137,6 +182,40 @@ input{
     border: solid 0.0625em var(--SS-black);
     padding: 0.41em 0.5em 0.29em 0.5em;
     line-height: 1em;
+    box-sizing: border-box;
+}
+
+.checkbox input {
+    /* Hide the default checkbox */
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.checkbox label {
+    display: flex; /* Use flexbox for alignment */
+    align-items: center; /* Vertically center content */
+    cursor: pointer;
+}
+
+.checkbox label::before {
+    content: '';
+    display: inline-block;
+    width: 1.25em;
+    height: 1.25em;
+    border: solid 0.0625em var(--SS-black);
+    margin-right: 0.5em;
+    flex-shrink: 0; /* Prevent the pseudo-element from shrinking */
+}
+
+.checkbox input:checked + label::before {
+    content: '✔'; /* This is where the checkmark goes */
+    font-size: 1em; /* Adjust font size as needed */
+    text-align: center;
+    line-height: 1.5em; /* Match height for vertical centering */
+    color: var(--SS-white); /* Color of the checkmark */
+    background-color: var(--SS-black); /* Or whatever color you want the background to be */
 }
 
 input:placeholder-shown{
@@ -157,9 +236,6 @@ input:not(:focus):not(:placeholder-shown):invalid{
 input:valid {
   color: var(--SS-black);
 }
-
-.name{ width: 25%;}
-.email{ width: 45%;}
 
 /* 타이포그래피 */
 
@@ -328,7 +404,6 @@ h1 {
 .pad{
     width: 50em;
     height: 25em;
-    margin-top: 2em;
 }
 .svg-container{
     position: relative;
@@ -387,28 +462,51 @@ h1 {
         margin: 0 auto;
     }
     
+    div{min-width: 0;}
     .nav {
         justify-content: space-between;
     }
     
-    .form{
-        width: 100%;
-    }
-    form{
-        flex-direction: column;
-        width: auto;
-        height: fit-content;
-    }
     input{
         width: 100%;
     }
     
-    button { width: 100%; height: 2.75em;}
-    .name{ width: auto; height: 1.5em;}
-    .email{ width: auto; height: 1.5em;}
+    .form-wrapper{
+        width: 100%;
+    }
+    
+   .my-form {
+       display: grid;
+       grid-template-columns: 100%; /* Single column for all items */
+       grid-template-areas:
+           "name"
+           "email"
+           "footer"
+           "button"; /* Stack items vertically */
+       width: 100%; /* Full width */
+       grid-auto-rows: auto; /* Let rows adjust their height automatically */
+    }
+
+    .my-form > .name,
+    .my-form > .email,
+    .my-form > .submit-button {
+        grid-column: span 1; /* Ensure all items span the single column */
+        /* You might want to adjust heights/margins for mobile if needed */
+        height: 2.25em;
+    }
+    .my-form > .checkbox {
+        min-width: 0;
+        grid-column: span 1;
+        height: 1.5em;
+        justify-self: start;
+        text-align: left;
+        margin: 0;
+    }
+    
     
     .box{
         width: 100%;
+        
     }
     
     .two-column{
@@ -417,9 +515,8 @@ h1 {
     }
     
     .pad{
-        width: 100%;
-        height: 40em;
-        margin-top: 2em;
+        width: calc(100vw - 2em);
+        height: 25em;
     }
     .footer{
         width: 100vw;
