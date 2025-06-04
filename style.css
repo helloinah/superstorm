@@ -6,6 +6,9 @@
     --SS-thunder: rgba(245, 255, 0, 1);
     --SS-white: rgba(245, 245, 250, 1);
     --SS-input: rgba(140, 140, 150, 0.5);
+    --SS-stroke-desktop: 0.1em;
+    --SS-stroke-desktop-bold: 0.15em;
+    --SS-stroke-mobile: 0.0625em;
 
 }
 
@@ -79,7 +82,7 @@ a {
 
 .privacy:hover {
     padding-bottom: 0.125em;
-    border-bottom: solid 0.09em var(--SS-black);
+    border-bottom: solid var(--SS-stroke-desktop) var(--SS-black);
     cursor: pointer;
 }
 
@@ -87,9 +90,9 @@ a {
     text-align: center;
     font-size: 0.75em;
     width: auto;
-    border-top: solid 0.095em var(--SS-black);
-    border-left: solid 0.095em var(--SS-black);
-    border-right: solid 0.095em var(--SS-black);
+    border-top: solid var(--SS-stroke-desktop) var(--SS-black);
+    border-left: solid var(--SS-stroke-desktop) var(--SS-black);
+    border-right: solid var(--SS-stroke-desktop) var(--SS-black);
     margin-bottom: -1em;
     /* Initial state (hidden) */
     opacity: 0;
@@ -183,7 +186,7 @@ input{
     font-weight: 400;
     font-size: 0.9em;
     color: var(--SS-input);
-    border: solid 0.0625em var(--SS-black);
+    border: solid var(--SS-stroke-desktop) var(--SS-black);
     padding: 0.41em 0.5em 0.29em 0.5em;
     line-height: 1em;
     box-sizing: border-box;
@@ -208,7 +211,7 @@ input{
     display: inline-block;
     width: 1.25em;
     height: 1.25em;
-    border: solid 0.0625em var(--SS-black);
+    border: solid var(--SS-stroke-desktop) var(--SS-black);
     margin-right: 0.5em;
     flex-shrink: 0; /* Prevent the pseudo-element from shrinking */
 }
@@ -224,7 +227,7 @@ input{
 
 input:placeholder-shown{
     color: var(--SS-input);
-    border: solid 0.0625em var(--SS-black);
+    border: solid var(--SS-stroke-desktop) var(--SS-black);
 }
 
 input:focus {
@@ -294,7 +297,7 @@ h1 {
 
 .nav li{
     width: hug;
-    border-bottom: solid 0.0625em;
+    border-bottom: solid var(--SS-stroke-desktop) var(--SS-black);
     list-style: none;
     cursor: pointer;
 }
@@ -323,7 +326,7 @@ h1 {
 }
 
 .title{
-    border-bottom: solid 0.125em;
+    border-bottom: solid var(--SS-stroke-desktop-bold) var(--SS-black);
     padding: 1em 0 1em 0;
     margin-bottom: 1.5em;
 }
@@ -349,8 +352,8 @@ h1 {
 
 .box-title-1{
     margin-top: .5em;
-    border-top: solid;
-    border-left: solid;
+    border-top: solid var(--SS-stroke-desktop)  var(--SS-black);
+    border-left: solid var(--SS-stroke-desktop)  var(--SS-black);
     width: 100%;
 }
 .box-title-2{
@@ -361,15 +364,15 @@ h1 {
 }
 .box-title-3{
     margin-top: .5em;
-    border-top: solid;
-    border-right: solid;
+    border-top: solid var(--SS-stroke-desktop)  var(--SS-black);
+    border-right: solid var(--SS-stroke-desktop)  var(--SS-black);
     width: 100%;
 }
 
 .box-content{
-    border-left: solid;
-    border-right: solid;
-    border-bottom: solid;
+    border-left: solid var(--SS-stroke-desktop)  var(--SS-black);
+    border-right: solid var(--SS-stroke-desktop)  var(--SS-black);
+    border-bottom: solid var(--SS-stroke-desktop)  var(--SS-black);
     margin: 0;
 }
 
@@ -397,7 +400,7 @@ h1 {
     gap: 1em;
 }
 .two-column-title{
-    border-bottom: solid 0.125em;
+    border-bottom: solid var(--SS-stroke-desktop)  var(--SS-black);
     width: 100%;
 }
 
@@ -507,10 +510,11 @@ h1 {
         margin: 0;
     }
     
+    .box-title-1 { flex: 1 1 0; }
+    .box-title-2 { flex: 1 1 0; }
+    .box-title-3 { flex: 1 1 0; }
     
-    .box{
-        width: 100%;
-    }
+    .box{ width: 100%; max-width: none;}
     
     .two-column{
         grid-template-columns: repeat(1, minmax(288px, auto));
