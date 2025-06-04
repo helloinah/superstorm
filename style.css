@@ -468,7 +468,7 @@ h1 {
         min-width: 0;
         margin: 0 auto;
     }
-    
+    button {font-size: 1em;}
     div{min-width: 0;}
     .nav {
         justify-content: space-between;
