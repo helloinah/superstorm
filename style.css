@@ -65,7 +65,7 @@ html {
 
 body {
     font-size: clamp(16px, 5vw, 24px);
-    font-family: "Freesentation", "authentic-sans-150", sans-serif;
+    font-family: "Freesentation", "authentic-sans-150",  arial, sans-serif;
     color: var(--SS-black);
     background-color: var(--SS-white);
     width: 100%;
@@ -191,7 +191,7 @@ button {
     margin: 0;
 
     background-color: var(--SS-black);
-    font-family: "Freesentation", "authentic-sans-150", sans-serif;
+    font-family: "Freesentation", "authentic-sans-150", arial, sans-serif;
     font-size: 0.9em;
     color: var(--SS-white);
     padding: 0.55em 0.5em 0.45em 0.5em;
@@ -208,7 +208,7 @@ input {
     box-shadow: none;
 
     background-color: transparent;
-    font-family: "Freesentation-light", "authentic-sans-130", sans-serif;
+    font-family: "Freesentation-light", "authentic-sans-130", arial, sans-serif;
     font-weight: 400;
     font-size: 0.9em;
     color: var(--SS-input);
