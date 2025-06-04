@@ -204,6 +204,8 @@ input {
     -moz-appearance: none;
     appearance: none;
     margin: 0;
+    border-radius: 0;
+    box-shadow: none;
 
     background-color: transparent;
     font-family: "Freesentation-light", "authentic-sans-130", sans-serif;
