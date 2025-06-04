@@ -562,7 +562,5 @@ h1 {
         padding-top: 1em;
     }
 
-    .footer_main div {
-        width: 100%;
-    }
+    .footer_main div { width: 100%; }
 }
