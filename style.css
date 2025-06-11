@@ -506,6 +506,12 @@ h1 {
         min-width: 0;
         margin: 0 auto;
     }
+    
+    #logo {
+    width: calc(100vw - 2em);
+    max-width: calc(100vw - 2em);
+    min-width: 0;
+    }
 
     button {
         font-size: 1em;
