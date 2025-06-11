@@ -428,28 +428,29 @@ document.addEventListener('DOMContentLoaded', async () => {
     const observerOptions = {
         root: null, // viewport as the root
         rootMargin: '0px', // No margin around the root
-        threshold: 0.5 // Trigger when 50% of the element is visible
+        threshold: 0.1 // Trigger when 50% of the element is visible
     };
 
     let activeColorSchemeIdOnScroll = null; // To track the currently active scheme from scroll
 
-    const observerCallback = (entries, observer) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                const schemeId = entry.target.id;
-                // Only update if it's a new scheme based on scroll
-                if (schemeId !== activeColorSchemeIdOnScroll) {
-                    const scheme = scrollColorSchemes[schemeId];
-                    if (scheme) {
-                        document.documentElement.style.setProperty('--SS-white', scheme.cssVar);
-                        updateSvgColors(scheme.targetColors, scheme.newColor);
-                        activeColorSchemeIdOnScroll = schemeId;
-                        console.log(`Scrolled to '${schemeId}', applying colors.`);
-                    }
+   const observerCallback = (entries, observer) => {
+    console.log("IntersectionObserver callback triggered!"); // Confirms callback fires
+    entries.forEach(entry => {
+        console.log(`Element ID: ${entry.target.id}, isIntersecting: ${entry.isIntersecting}, IntersectionRatio: ${entry.intersectionRatio}`); // Details for each observed element
+        if (entry.isIntersecting) {
+            const schemeId = entry.target.id;
+            if (schemeId !== activeColorSchemeIdOnScroll) {
+                const scheme = scrollColorSchemes[schemeId];
+                if (scheme) {
+                    document.documentElement.style.setProperty('--SS-white', scheme.cssVar);
+                    updateSvgColors(scheme.targetColors, scheme.newColor);
+                    activeColorSchemeIdOnScroll = schemeId;
+                    console.log(`Scrolled to '${schemeId}', applying colors.`);
                 }
             }
-        });
-    };
+        }
+    });
+};
 
     const observer = new IntersectionObserver(observerCallback, observerOptions);
 
