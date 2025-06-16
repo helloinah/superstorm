@@ -12,6 +12,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     // REFERENCE TO THE INLINE BACKGROUND SVG
     const svgBgElement = document.querySelector('.svg-bg'); // Select the inline background SVG
+    console.log('svgBgElement found:', svgBgElement); // Diagnostic log
 
     // Define BOTH desktop and mobile image paths for the animated sequence
     const desktopImagePaths = [
@@ -95,14 +96,17 @@ document.addEventListener('DOMContentLoaded', async () => {
         });
         const results = await Promise.all(fetchPromises);
         preloadedAnimatedSvgTexts.push(...results.filter(text => text !== null));
+        console.log('Preloaded animated SVG texts length:', preloadedAnimatedSvgTexts.length); // Diagnostic log
     };
 
     // --- Preload the static background SVG ---
     const preloadBgSvg = async (path) => {
+        console.log('Preloading background SVG from path:', path); // Diagnostic log
         try {
             const response = await fetch(path);
             if (!response.ok) throw new Error(`HTTP error! Status: ${response.status} - ${path}`);
             preloadedBgSvgText = await response.text();
+            console.log('Background SVG preloaded successfully. Text length:', preloadedBgSvgText ? preloadedBgSvgText.length : 0); // Diagnostic log
         } catch (error) {
             console.error(`Error preloading background SVG ${path}:`, error);
             preloadedBgSvgText = null;
@@ -155,6 +159,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 animatedSvgImg.parentNode.replaceChild(animatedSvgWrapper, animatedSvgImg);
             }
             currentInlineAnimatedSvg = animatedSvgWrapper.querySelector('svg');
+            console.log('Animated SVG converted to inline:', currentInlineAnimatedSvg); // Diagnostic log
 
         } catch (error) {
             console.error('Error converting animated SVG to inline or updating:', error);
@@ -164,25 +169,40 @@ document.addEventListener('DOMContentLoaded', async () => {
     // --- Update the static background SVG content ---
     const updateBgSvgContent = async (svgText) => {
         if (!svgBgElement || !svgText) {
-            console.error("Background SVG element not found or SVG text missing.");
+            console.error("Background SVG element not found or SVG text missing during update.");
             return;
         }
+        console.log('Updating background SVG content. Text length:', svgText.length); // Diagnostic log
         try {
             const svgDoc = parser.parseFromString(svgText, 'image/svg+xml');
             let newBgSvgElement = svgDoc.documentElement;
 
-            // Preserve original viewBox and other attributes if the mobile SVG is different
-            // Or ensure the mobile SVG has the same viewBox.
-            // For simplicity, we'll just update innerHTML and attributes from the new SVG.
-            svgBgElement.innerHTML = newBgSvgElement.innerHTML;
+            // Clear existing children of svgBgElement
+            while (svgBgElement.firstChild) {
+                svgBgElement.removeChild(svgBgElement.firstChild);
+            }
+            console.log('Existing background SVG children cleared.'); // Diagnostic log
+
+            // Append children from the new SVG content
+            // Using importNode to ensure elements are correctly owned by the document
+            Array.from(newBgSvgElement.children).forEach(child => {
+                const importedChild = document.importNode(child, true); // true for deep clone
+                svgBgElement.appendChild(importedChild);
+            });
+            console.log('New background SVG children appended.'); // Diagnostic log
+
+            // Copy attributes from newBgSvgElement to svgBgElement
             Array.from(newBgSvgElement.attributes).forEach(attr => {
-                // Only copy attributes that are not already set by CSS or are critical (like viewBox)
+                // Ensure xmlns is copied if necessary for IE/older browsers, though usually handled by importNode
                 if (attr.name !== 'class' && attr.name !== 'style') {
                     svgBgElement.setAttribute(attr.name, attr.value);
                 }
             });
-            // Reapply current active colors if any are set
+            console.log('Background SVG attributes updated.'); // Diagnostic log
+
+            // Reapply colors
             applyColorsToSingleSvg(svgBgElement, currentAnimatedSvgTargetColors, currentAnimatedSvgNewColor);
+            console.log('Background SVG colors reapplied.'); // Diagnostic log
 
         } catch (error) {
             console.error('Error updating background SVG content:', error);
@@ -212,30 +232,13 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     }
 
+    // --- NEW: Function to handle initial conversion of other <img> SVGs to inline ---
+    const convertOtherImageSvgsToInline = async (targetColors, newColor) => {
+        const imgSvgElementsToConvert = document.querySelectorAll('img[src$=".svg"]:not(#animatedSvg)');
 
-    // --- updateSvgColors: Now applies colors to all inline SVGs, including background ---
-    const updateSvgColors = async (targetColors, newColor) => {
-        // Store the new color scheme so subsequent animation frames also get colored
-        currentAnimatedSvgTargetColors = targetColors;
-        currentAnimatedSvgNewColor = newColor;
-
-        // Apply color changes to the animated SVG (if it exists and is inline)
-        if (currentInlineAnimatedSvg) {
-            applyColorsToSingleSvg(currentInlineAnimatedSvg, targetColors, newColor);
-        }
-
-        // Apply color changes to the static background SVG (if it exists)
-        if (svgBgElement) { //
-            applyColorsToSingleSvg(svgBgElement, targetColors, newColor); //
-        }
-
-        // --- Step 1: Process any *other* <img> tags with SVG sources that haven't been converted yet ---
-        // EXCLUDE the animated SVG <img> element
-        const imgSvgElements = document.querySelectorAll('img[src$=".svg"]:not(#animatedSvg)');
-
-        for (const img of imgSvgElements) {
-            // Check if it's already converted and wrapped by a dynamic-svg-wrapper
-            if (!img.parentNode.classList.contains('dynamic-svg-wrapper')) { // Ensure we don't re-process already converted ones
+        for (const img of imgSvgElementsToConvert) {
+            // Only convert if it hasn't been converted already
+            if (!img.parentNode.classList.contains('dynamic-svg-wrapper')) {
                 try {
                     const response = await fetch(img.src);
                     if (!response.ok) throw new Error(`HTTP error! Status: ${response.status} - ${img.src}`);
@@ -243,13 +246,16 @@ document.addEventListener('DOMContentLoaded', async () => {
                     const svgDoc = parser.parseFromString(svgText, 'image/svg+xml');
                     let modifiedSvgElement = svgDoc.documentElement;
 
-                    // Apply colors to the fetched SVG before inserting
-                    modifiedSvgElement = applyColorsToSingleSvg(modifiedSvgElement, targetColors, newColor); //
+                    // Apply current colors during initial conversion
+                    if (targetColors && targetColors.length > 0 && newColor) {
+                        modifiedSvgElement = applyColorsToSingleSvg(modifiedSvgElement, targetColors, newColor);
+                    }
 
                     const inlineSvgWrapper = document.createElement('div');
                     inlineSvgWrapper.classList.add('dynamic-svg-wrapper');
                     inlineSvgWrapper.innerHTML = serializer.serializeToString(modifiedSvgElement);
 
+                    // Copy computed styles from the original <img> to the new wrapper
                     const computedStyle = getComputedStyle(img);
                     inlineSvgWrapper.style.width = computedStyle.width;
                     inlineSvgWrapper.style.height = computedStyle.height;
@@ -264,14 +270,33 @@ document.addEventListener('DOMContentLoaded', async () => {
                 } catch (error) {
                     console.error('Error fetching or processing other SVG from <img>:', error);
                 }
-            } else {
-                // If it's already a wrapper, find its SVG and apply colors directly
-                const inlineSvg = img.parentNode.querySelector('svg');
-                if (inlineSvg) {
-                    applyColorsToSingleSvg(inlineSvg, targetColors, newColor);
-                }
             }
         }
+    };
+
+    // --- updateSvgColors: Now only applies colors to already inline SVGs ---
+    const updateSvgColors = async (targetColors, newColor) => {
+        // Store the new color scheme so subsequent animation frames also get colored
+        currentAnimatedSvgTargetColors = targetColors;
+        currentAnimatedSvgNewColor = newColor;
+
+        // Apply color changes to the animated SVG (if it exists and is inline)
+        if (currentInlineAnimatedSvg) {
+            applyColorsToSingleSvg(currentInlineAnimatedSvg, targetColors, newColor);
+        }
+
+        // Apply color changes to the static background SVG (if it exists)
+        if (svgBgElement) {
+            applyColorsToSingleSvg(svgBgElement, targetColors, newColor);
+        }
+
+        // Apply color changes to ALL other inlined SVGs that were originally <img> tags
+        // These will now be <svg> elements inside a .dynamic-svg-wrapper (excluding animatedSvgWrapper)
+        const otherInlinedSvgs = document.querySelectorAll('.dynamic-svg-wrapper > svg:not(.animated-svg-wrapper > svg)');
+
+        otherInlinedSvgs.forEach(svgEl => {
+            applyColorsToSingleSvg(svgEl, targetColors, newColor);
+        });
     };
 
 
@@ -295,24 +320,30 @@ document.addEventListener('DOMContentLoaded', async () => {
         // Preload the new set of animated images
         await preloadAllSvgs(currentAnimatedImagePaths);
         // Preload the new static background SVG
-        await preloadBgSvg(currentBgSvgPath); //
+        await preloadBgSvg(currentBgSvgPath);
 
         // Update the animated SVG display
         if (preloadedAnimatedSvgTexts.length > 0) {
             await convertAnimatedSvgToInline(preloadedAnimatedSvgTexts[0]);
             animationInterval = setInterval(showNextFrame, frameDuration);
+            console.log('Animation interval started.'); // Diagnostic log
         } else {
-            console.error("Failed to preload any animated SVGs.");
+            console.error("Failed to preload any animated SVGs. Animation will not start."); // Modified error message
         }
 
         // Update the static background SVG content
-        if (preloadedBgSvgText) { //
-            await updateBgSvgContent(preloadedBgSvgText); //
+        if (preloadedBgSvgText) {
+            await updateBgSvgContent(preloadedBgSvgText);
         } else {
             console.error("Failed to preload background SVG content.");
         }
 
-        // Reapply current colors after source swap, ensuring all SVGs are colored correctly
+        // NEW: Convert any remaining <img> SVGs to inline and recolor them
+        // This ensures they are inlined once during initial setup or media query change
+        await convertOtherImageSvgsToInline(currentAnimatedSvgTargetColors, currentAnimatedSvgNewColor);
+
+        // Reapply current colors to ensure all SVGs are colored correctly
+        // This call will now only operate on already inlined SVGs.
         if (currentAnimatedSvgTargetColors.length > 0) {
             updateSvgColors(currentAnimatedSvgTargetColors, currentAnimatedSvgNewColor);
         }
@@ -325,13 +356,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     // Initial check for all SVGs
     await handleAllSvgSourceSwap(mediaQueryForSVGs);
 
-    // Initial load for other non-animated <img> SVGs is now done by updateSvgColors directly
-    // Call updateSvgColors with initial default colors if needed, or rely on button clicks
-    // Example: To set initial colors to the "about" scheme
-    // updateSvgColors(['#F5F5FA', '#46B4FF', '#8C8C96', '#F5FF00'], '#8C8C96'); // Uncomment if you want an initial color scheme
 
-
-    // --- Button Click Events (same as your original) ---
+    // --- Button Click Events ---
     if (aboutBtn) {
         aboutBtn.addEventListener('click', () => {
             document.documentElement.style.setProperty('--SS-white', 'var(--SS-grey)');
@@ -358,4 +384,79 @@ document.addEventListener('DOMContentLoaded', async () => {
             updateSvgColors(targetColors, newColor);
         });
     } else { console.error("Div with ID 'plan_btn' not found."); }
+
+    // --- NEW: Scroll-triggered Color Transformations ---
+
+    // Define color schemes for scroll triggers, mapping element IDs to their themes
+    // These themes should ideally match the button click themes for consistency.
+    // Ensure you have a CSS variable for '--SS-yellow' or use an existing one for 'feedback_btn'.
+    const scrollColorSchemes = {
+        'about': { // Assumed scroll target element ID from index.html
+            cssVar: 'var(--SS-grey)',
+            targetColors: ['#F5F5FA', '#46B4FF', '#8C8C96', '#F5FF00'],
+            newColor: '#8C8C96'
+        },
+        'movement': { // Assumed scroll target element ID from index.html
+            cssVar: 'var(--SS-sky)',
+            targetColors: ['#F5F5FA', '#F5FF00', '#8C8C96', '#46B4FF'],
+            newColor: '#46B4FF'
+        },
+        'plan': { // Assumed scroll target element ID from index.html
+            cssVar: 'var(--SS-thunder)',
+            targetColors: ['#F5F5FA', '#46B4FF', '#8C8C96', '#F5FF00'],
+            newColor: '#F5FF00'
+        },
+        'feedback': { // Added feedback section to scroll triggers based on index.html
+            cssVar: 'rgba(245, 245, 250, 1)', // Example: using a dummy color, define in CSS or choose existing
+            targetColors: ['#F5F5FA', '#46B4FF', '#8C8C96', '#F5FF00'],
+            newColor: '#F5FF00' // Example: using a dummy color
+        }
+    };
+
+    // Select all target elements for observation
+    const scrollTriggerElements = [];
+    for (const id in scrollColorSchemes) {
+        const el = document.getElementById(id);
+        if (el) {
+            scrollTriggerElements.push(el);
+        } else {
+            console.warn(`Scroll trigger element with ID '${id}' not found. Please ensure this ID exists in your HTML for scroll effects.`);
+        }
+    }
+
+    // Intersection Observer setup
+    const observerOptions = {
+        root: null, // viewport as the root
+        rootMargin: '0px', // No margin around the root
+        threshold: 0.1 // Trigger when 50% of the element is visible
+    };
+
+    let activeColorSchemeIdOnScroll = null; // To track the currently active scheme from scroll
+
+   const observerCallback = (entries, observer) => {
+    console.log("IntersectionObserver callback triggered!"); // Confirms callback fires
+    entries.forEach(entry => {
+        console.log(`Element ID: ${entry.target.id}, isIntersecting: ${entry.isIntersecting}, IntersectionRatio: ${entry.intersectionRatio}`); // Details for each observed element
+        if (entry.isIntersecting) {
+            const schemeId = entry.target.id;
+            if (schemeId !== activeColorSchemeIdOnScroll) {
+                const scheme = scrollColorSchemes[schemeId];
+                if (scheme) {
+                    document.documentElement.style.setProperty('--SS-white', scheme.cssVar);
+                    updateSvgColors(scheme.targetColors, scheme.newColor);
+                    activeColorSchemeIdOnScroll = schemeId;
+                    console.log(`Scrolled to '${schemeId}', applying colors.`);
+                }
+            }
+        }
+    });
+};
+
+    const observer = new IntersectionObserver(observerCallback, observerOptions);
+
+    // Start observing the target elements
+    scrollTriggerElements.forEach(el => {
+        observer.observe(el);
+    });
+
 });
