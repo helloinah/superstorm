@@ -526,9 +526,8 @@ h1 {
     #logo {
     width: calc(100vw + 7em);
     min-width: 0;
-    margin-top: -6rem;
-    margin-left: -7rem; 
-    margin-right: -7rem;
+    margin-top: -4rem;
+    margin-left: -5rem; margin-right: -5rem;
     }
 
     button {
