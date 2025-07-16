@@ -144,11 +144,6 @@ img {
     margin: 0;
 }
 
-#logo {
-    width: 48em;
-    max-width: 48em;
-    min-width: 288px;
-}
 
 svg {
     width: 100%;
@@ -516,6 +511,10 @@ h1 {
     color: var(--SS-white); /* Added this line for explicit color setting */
 }
 
+#logo {
+    margin-top:-15rem; width: calc(100% + 40rem); margin-left: -20rem; margin-right: -20rem;
+    }
+
 /* 모바일 스타일 */
 @media (width <= 1024px) {
     body {
@@ -525,9 +524,11 @@ h1 {
     }
     
     #logo {
-    width: calc(100vw - 2em);
-    max-width: calc(100vw - 2em);
+    width: calc(100vw + 7em);
     min-width: 0;
+    margin-top: -6rem;
+    margin-left: -7rem; 
+    margin-right: -7rem;
     }
 
     button {
