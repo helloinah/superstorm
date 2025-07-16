@@ -165,7 +165,7 @@ svg {
     grid-template-columns: 25% auto 25%;
     grid-template-areas:
         "name email button"
-        "footer . .";
+        "policy msg ad" ;
 }
 
 .my-form > .name {
@@ -174,11 +174,28 @@ svg {
 }
 .my-form > .email {
     grid-area: email;
-    grid-column: span 1;
+    grid-column: span 2;
 }
-.my-form > .checkbox {
-    grid-area: footer;
-    grid-column: span 3;
+.my-form > .policy {
+    grid-column: span 2;
+    grid-area: policy;
+}
+.my-form > .ad{
+    grid-column: span 2;
+    grid-area: ad;
+}
+
+.my-form > .msg {
+    grid-area: msg;
+    grid-column: span 4;
+    height: 2rem;
+    font-size: 0.75em;
+    line-height: 2rem;
+    width: 100%;
+    text-align: center;
+    display: none;
+}
+.checkbox{
     height: 1em;
     font-size: 0.75em;
 }
@@ -537,7 +554,8 @@ h1 {
         grid-template-areas:
             "name"
             "email"
-            "footer"
+            "policy"
+            "ad"
             "button"; /* Stack items vertically */
         width: 100%; /* Full width */
         grid-auto-rows: auto; /* Let rows adjust their height automatically */
@@ -553,9 +571,8 @@ h1 {
     .my-form > .checkbox {
         min-width: 0;
         grid-column: span 1;
-        height: 1.5em;
-        justify-self: start;
-        text-align: left;
+        height: 1.25em;
+        justify-self: left;
         margin: 0;
     }
 

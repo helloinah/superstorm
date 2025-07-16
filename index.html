@@ -47,32 +47,48 @@
                 </div>
                 <div class="t-center">요즘 사회 이슈, “이건 좀 아니지 않아?” 라고 생각한다면 여기서 시작해보세요!</div>
 
-                <div class="form-wrapper">
-                    <form class="my-form">
-                        <input class="name" name="Name" type="text" placeholder="이름" required />
-                        <input class="email" name="Email" type="email" placeholder="email@email.com" required />
-
-                        <div class="checkbox">
+                <div class="form-wrapper" id="stb_subscribe">
+                    <form class="my-form" action="https://stibee.com/api/v1.0/lists/I_S4O-n5QWcKX7y-GQA_Qf7yIQEv-A==/public/subscribers" method="POST" target="_blank" accept-charset="utf-8" name="stb_subscribe_form" id="stb_subscribe_form" data-lang="" novalidate>
+                        <input class="name" name="Name" type="text" id="stb_name"  placeholder="이름" required />
+                        <input class="email" name="Email" type="email" id="stb_email" placeholder="email@email.com" required />
+                        <div class="checkbox policy">
                             <input
                                 type="checkbox"
                                 class="agree"
                                 name="agree"
-                                value="agree"
+                                value="stb_policy_true"
                                 required
-                                id="privacyCheckboxAgreeTop" />
+                                id="stb_policy" />
 
-                            <label for="privacyCheckboxAgreeTop">
+                            <label for="stb_policy">
                                 <span class="privacy">개인정보 수집 및 이용에 동의합니다.</span>
                             </label>
+                        </div> 
+                        <div class="checkbox ad">
+                            <input
+                                type="checkbox"
+                                class="agree"
+                                name="agree"
+                                value="stb_ad_agreement_true"
+                                id="stb_ad_agreement" />
+                            <label for="stb_ad_agreement">
+                                <span class="privacy">(선택) 광고성 정보 수신에 동의합니다.</span>
+                            </label>
                         </div>
-
-                        <button type="submit" class="submit-button">메일친구 되기</button>
+                        <button type="submit" id="stb_form_submit_button" class="submit-button">메일친구 되기</button>
+                    <div class="msg">
+                    <div class="stb_form_msg_error" id="stb_name_error"></div>
+                    <div class="stb_form_msg_error" id="stb_email_error"></div>
+                    <div class="stb_form_msg_error" id="stb_policy_error"></div>
+                    <div class="stb_form_result" id="stb_form_result"> </div></div>
                     </form>
+                    
                 </div>
                 <p class="privacy-text" id="privacyTextTop">
-                    슈퍼스톰은 이름과 이메일을 단체 소식 발송, 행사 안내, 콘텐츠 제공 등 커뮤니케이션 목적으로
-                    수집·이용하며, 수집일로부터 2년간 또는 제공자의 동의 철회 시까지 보유·관리합니다. 동의하지 않으실
-                    경우, 일부 정보 제공에 제한이 있을 수 있습니다.
+                    뉴스레터 발송을 위한 최소한의 개인정보를 수집하고 이용합니다. 수집된 정보는 발송 외 다른 목적으로 이용되지 않으며, 서비스가 종료되거나 구독을 해지할 경우 즉시 파기됩니다.
+                </p>
+                <p class="privacy-text" id="marketingTextTop">
+                    제휴 콘텐츠, 프로모션, 이벤트 정보 등의 광고성 정보를 수신합니다.
                 </p>
 
                 <ul class="nav">
@@ -245,38 +261,8 @@
                             </p>
                             <div class="header second">
                                 <div class="t-center">나의 힘을 세상을 바꾸는 힘으로 전환시키자!</div>
-                                <div class="form-wrapper">
-                                    <form class="my-form">
-                                        <input class="name" name="Name" type="text" placeholder="이름" required />
-                                        <input
-                                            class="email"
-                                            name="Email"
-                                            type="email"
-                                            placeholder="email@email.com"
-                                            required />
-
-                                        <div class="checkbox">
-                                            <input
-                                                type="checkbox"
-                                                class="agree"
-                                                name="agree"
-                                                value="agree"
-                                                required
-                                                id="privacyCheckboxAgreeBottom" />
-
-                                            <label for="privacyCheckboxAgreeBottom">
-                                                <span class="privacy">개인정보 수집 및 이용에 동의합니다.</span>
-                                            </label>
-                                        </div>
-
-                                        <button type="submit" class="submit-button">메일친구 되기</button>
-                                    </form>
-                                </div>
-                                <p class="privacy-text" id="privacyTextBottom">
-                                    슈퍼스톰은 이름과 이메일을 단체 소식 발송, 행사 안내, 콘텐츠 제공 등 커뮤니케이션
-                                    목적으로 수집·이용하며, 수집일로부터 2년간 또는 제공자의 동의 철회 시까지
-                                    보유·관리합니다. 동의하지 않으실 경우, 일부 정보 제공에 제한이 있을 수 있습니다.
-                                </p>
+                            <a href="#logo" style="text-decoration: none;"><button style="width: 100%; padding: 1.1rem;">메일친구 되기</button></a>
+                
                             </div>
                         </div>
                     </div>
@@ -325,9 +311,11 @@
                 </div>
             </div>
         </div>
-        <script src="Subscribe.js"></script>
+        <!-- <script src="Subscribe.js"></script> -->
         <script src="Animatedbgcolors.js"></script>
         <script src="imageSwap.js"></script>
         <script src="privacy.js"></script>
+        <script type="text/javascript" src="https://resource.stibee.com/subscribe/stb_subscribe_form.js"></script>
+        <script type="text/javascript" src="formAlerts.js"></script>
     </body>
 </html>
